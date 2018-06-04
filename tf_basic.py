@@ -50,22 +50,32 @@ def cost(logits,labels):
     return cost
 
 
-
 logits = sigmoid(np.array([0.2,0.4,0.7,0.9]))
 cost = cost(logits, np.array([0,0,1,1]))
 print ("cost = " + str(cost))
 
 
+def one_hot_matrix(label,C):
+    C = tf.constant(C,name='C')
+    one_hot_matrix = tf.one_hot(label,C,axis=0)
+    sess=tf.Session()
+    one_hot=sess.run(one_hot_matrix)
+    sess.close()
+    return one_hot
+
+labels = np.array([1,2,3,0,2,1])
+one_hot = one_hot_matrix(labels, C = 4)
+print ("one_hot = " + str(one_hot))
 
 
+def ones(shape):
+    ones = tf.ones(shape)
+    sess=tf.Session()
+    ones = sess.run(ones)
+    sess.close()
+    return ones
 
-
-
-
-
-
-
-
+print ("ones = " + str(ones([3])))
 
 
 
