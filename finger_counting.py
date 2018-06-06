@@ -37,7 +37,7 @@ print ("Y_test shape: " + str(Y_test.shape))
 
 def create_placeholders(n_x, n_y):
     x=tf.placeholder(tf.float32,shape=(n_x,None))
-    y=tf.placeholder(tf.float32,shape=(n_y,None))
+    y=tf.placeholder(tf.float32,shape=(n_y,None))#None
 
     return x,y
 """
@@ -49,11 +49,12 @@ print ("Y = " + str(Y))
 def initialize_parameters():
     tf.set_random_seed(1)
     W1 = tf.get_variable("W1",[25,12288],initializer=tf.contrib.layers.xavier_initializer(seed=1))
-    b1 = tf.get_variable("b1",[25,1],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b1 = tf.get_variable("b1",[25,1],initializer=tf.zeros_initializer())
+                         #initializer=tf.contrib.layers.xavier_initializer(seed=1))
     W2 = tf.get_variable("W2",[12,25],initializer=tf.contrib.layers.xavier_initializer(seed=1))
-    b2 = tf.get_variable("b2",[12,1],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b2 = tf.get_variable("b2",[12,1],initializer=tf.zeros_initializer())
     W3 = tf.get_variable("W3",[6,12],initializer=tf.contrib.layers.xavier_initializer(seed=1))
-    b3 = tf.get_variable("b3",[6,1],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b3 = tf.get_variable("b3",[6,1],initializer=tf.zeros_initializer())
 
     parameters = {"W1": W1,
                   "b1": b1,
@@ -91,6 +92,7 @@ def forward_propagation(X, parameters):
     # A2 = relu(Z2)
     Z3 = tf.add(tf.matmul(W3,A2),b3)#
     # Z3 = np.dot(W3,Z2) + b3
+    return Z3
   
 """
 tf.reset_default_graph()
@@ -103,12 +105,12 @@ with tf.Session() as sess:
 """
 
 def compute_cost(Z3, Y):
+   
     logits = tf.transpose(Z3)
-    labels = tf.transpose(Y)
-
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits,
-                                                                  labels=labels))
-
+    labels = tf.transpose(Y)    
+    
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits,labels=labels))
+    
     return cost
 
 """
@@ -120,8 +122,7 @@ with tf.Session() as sess:
     Z3 = forward_propagation(X, parameters)
     cost = compute_cost(Z3, Y)
     print("cost = " + str(cost))
-"""  
-
+"""
 
 
 def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
@@ -211,7 +212,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
 parameters = model(X_train, Y_train, X_test, Y_test)
 
 
-
+# error logits = tf.transpose(Z3)
 
 
 
